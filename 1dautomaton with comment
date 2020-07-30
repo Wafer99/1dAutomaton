@@ -1,0 +1,59 @@
+import random
+
+life = []
+#life will be the list where life happens
+life_dead = [0, 1]
+#here are the two states of the cells, 0 = dead and 1 = alive. will use this to randomize
+life2 = []
+#second list used to go build the process. (i feel there is a better way to do this, you will see how it works)
+daycount = 0
+#this function is used to check when we reach the day limit chosen by the user
+
+living = True
+#variable used to end the cycle
+
+
+
+name = input("Hello! you will now be God for a new world. How should it be named?")
+#miscellaneous world name
+dimension = int(input(" How long should it be?"))
+#lenght of 1dimensional grid
+life_forms = int(input("how many living being should there be?"))
+#number of lifeforms at day = 0
+days = int(input("for how many days shall this universe exist?"))
+#number of days that the simulation will last
+
+for i in range(0, dimension):
+    life.append(0)
+for i in range(0, life_forms):
+    life.pop(-1)
+    life.insert(i, 1)
+random.shuffle(life)
+#this 2 loops build life at day 0 based on the variables choosen by the user
+
+print("congratulation, you created life. This is how " + str(name) + " looks like on day 0 " + str(life))
+
+#here main loop of life starts
+while living == True:
+    for i in range(0, (len(life)-1)):
+        if life[i - 1] == life[i + 1] == 1:
+            life2.insert(i, 1)
+            #first rule: if cell has 1s on both side, it will be alive on the next day
+        if life[i - 1] == life[i + 1] == 0:
+            life2.insert(i, 0)
+            #second rule: if cell has 0 on both sides, it will die on the next day
+        if life[i - 1] != life[i + 1]:
+            random.shuffle(life_dead)
+            life2.insert(i, life_dead[0])
+            #third rule: if the sides are a combination of 0 and 1, the result will be random. will pick first element and shuffle randomly life_dead which is [1, 0]
+    life2.append(life[-1])
+    life = life2
+    life2 = []
+    #life2 is basically to keep track of "next day" without loosing current day. At the end of the cicle replaces Life2 with Life. Empties life2 and loop begins again.
+    daycount = daycount + 1
+    #daycounter keeps count of passing days
+    print("day number " + str(daycount) + " and " + str(name) + " looks like this: " + str(life))
+
+    if daycount == days:
+        living = False
+        #daycount reaches number of days decided by the user
